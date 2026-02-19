@@ -32,7 +32,8 @@ jobs:
         run: |
           mvn sonar:sonar \
             -Dsonar.projectKey=alex-project-ironhack \
-            -Dsonar.sources=src \
+            -Dsonar.sources=src/main \
+            -Dsonar.tests=src/test \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
 
