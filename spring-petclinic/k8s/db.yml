@@ -11,7 +11,9 @@ stringData:
   port: "5432"
   database: "petclinic"
   username: "user"
-  password: "pass"
+  # WARNING: Replace with actual secret in production
+  # Use: kubectl create secret generic demo-db --from-literal=password='your-secure-password'
+  password: "pass"  # TODO: Replace with environment variable or external secret
 
 ---
 apiVersion: v1
