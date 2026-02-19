@@ -87,5 +87,6 @@
 **/tfplan
 **/.terraformrc
 **/terraform.rc
+**/terraform.tfvars
 mysql-secret.yaml
 first_eks_commands.md

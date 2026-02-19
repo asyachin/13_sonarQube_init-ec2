@@ -30,5 +30,5 @@ output "vpc_id" {
 
 output "ssh_command" {
   description = "SSH command to connect to the instance"
-  value       = "ssh -i ~/.ssh/alex-frankfurt-key ubuntu@${aws_instance.main.public_ip}"
+  value       = "ssh -i ~/.ssh/${var.key_name} ubuntu@${aws_instance.main.public_ip}"
 }

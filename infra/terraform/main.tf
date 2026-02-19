@@ -123,6 +123,52 @@ resource "aws_instance" "main" {
 
   associate_public_ip_address = true
 
+  root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
+    encrypted   = true
+  }
+
+  user_data = <<-EOF
+    #!/bin/bash
+    set -e
+    
+    # Update package index
+    apt-get update
+    
+    # Install prerequisites
+    apt-get install -y ca-certificates curl
+    
+    # Add Docker's official GPG key
+    install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    chmod a+r /etc/apt/keyrings/docker.asc
+    
+    # Add Docker repository
+    # Ubuntu 24.04 LTS codename is "noble"
+    echo "Types: deb" > /etc/apt/sources.list.d/docker.sources
+    echo "URIs: https://download.docker.com/linux/ubuntu" >> /etc/apt/sources.list.d/docker.sources
+    echo "Suites: noble" >> /etc/apt/sources.list.d/docker.sources
+    echo "Components: stable" >> /etc/apt/sources.list.d/docker.sources
+    echo "Signed-By: /etc/apt/keyrings/docker.asc" >> /etc/apt/sources.list.d/docker.sources
+    
+    # Update package index again
+    apt-get update
+    
+    # Install Docker Engine
+    apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    
+    # Add ubuntu user to docker group (to run docker without sudo)
+    usermod -aG docker ubuntu
+    
+    # Enable and start Docker service
+    systemctl enable docker
+    systemctl start docker
+    
+    # Verify Docker installation
+    docker --version
+  EOF
+
   tags = {
     Name = var.instance_name
   }
